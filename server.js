@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
   try {
     fs.appendFileSync(dataFile, logMsg);
     const logs = fs.readFileSync(dataFile, 'utf8');
-    res.send(`K8s Test [v4.1 PV/PVC] - Unbreakable Data\n\n[ Persisted Logs ]\n${logs}`);
+    res.send(`K8s Test [v4.2 PV/PVC] - Unbreakable Data\n\n[ Persisted Logs ]\n${logs}`);
   } catch (err) {
     res.status(500).send("Volume Mount Failed.");
   }
