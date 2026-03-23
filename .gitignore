@@ -1,0 +1,8 @@
+node_modules/
+
+tls.crt
+tls.key
+
+kube/config-secret.yaml
+
+tree.txt

@@ -1,0 +1,26 @@
+# 외부의 HTTP/HTTPS 트래픽을 클러스터 내부의 Service로 연결하는 Ingress 규칙입니다.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: k8s-test-ingress
+  annotations:
+    # URL 경로를 재작성하여 백엔드로 전달하기 위한 Nginx 설정입니다.
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+    - hosts:
+      - api.k8s-test.local
+      secretName: gigachad-tls-secret
+  rules:
+  # 트래픽을 받아낼 도메인 주소입니다.
+  - host: api.k8s-test.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            # 트래픽을 넘겨줄 K8s Service의 이름과 포트입니다.
+            name: k8s-test-service
+            port:
+              number: 80

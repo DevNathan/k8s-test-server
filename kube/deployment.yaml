@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-test-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: k8s-test-app
+  template:
+    metadata:
+      labels:
+        app: k8s-test-app
+    spec:
+      containers:
+      - name: k8s-test-container
+        # 4.0 버전 이미지로 교체합니다.
+        image: k8s-test-app:4.0
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3000
+        # 컨테이너 내부의 /data 디렉토리를 외부 볼륨과 연결(마운트)합니다.
+        volumeMounts:
+        - name: storage-volume
+          mountPath: /data
+      # 파드 레벨에서 사용할 볼륨(방금 만든 PVC)을 선언합니다.
+      volumes:
+      - name: storage-volume
+        persistentVolumeClaim:
+          claimName: gigachad-pvc
