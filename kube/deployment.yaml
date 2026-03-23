@@ -12,18 +12,22 @@ spec:
       labels:
         app: k8s-test-app
     spec:
+      imagePullSecrets:
+      - name: ghcr-login-secret
       containers:
       - name: k8s-test-container
-        # 4.0 버전 이미지로 교체합니다.
-        image: k8s-test-app:4.0
-        imagePullPolicy: Never
+        image: ghcr.io/devnathan/k8s-test-app:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 3000
-        # 컨테이너 내부의 /data 디렉토리를 외부 볼륨과 연결(마운트)합니다.
         volumeMounts:
         - name: storage-volume
           mountPath: /data
-      # 파드 레벨에서 사용할 볼륨(방금 만든 PVC)을 선언합니다.
+        envFrom:
+        - configMapRef:
+            name: gigachad-config
+        - secretRef:
+            name: gigachad-secret
       volumes:
       - name: storage-volume
         persistentVolumeClaim:
